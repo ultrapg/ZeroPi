@@ -90,9 +90,12 @@ If a model folder is scanned and does not contain a configuration, ZeroPi automa
   "download_url": "",
   "ctx_size": 6000,
   "n_gpu_layers": 99,
-  "temperature": 0.0
+  "temperature": 0.0,
+  "thinking": false
 }
 ```
+
+* `thinking`: A boolean (defaults to `false`). Set to `true` for models that support native reasoning/thinking output patterns (e.g. Qwen-3-Thinking or deepseek-r1 reasoning outputs). When set to `true`, ZeroPi configures the Pi agent's model profile with `"reasoning": true` so it properly parses and utilizes the model's thinking sequences.
 
 ---
 
@@ -120,6 +123,15 @@ Launch the application:
 ./zeropi.exe
 ```
 *On the first run, ZeroPi will detect missing runtimes and automatically trigger the auto-setup routine to download Node.js, the specified llama backend, and configure the workspace environment.*
+
+---
+
+## Credits
+
+ZeroPi orchestrates and depends upon the following excellent open-source projects:
+
+* **[Pi Coding Agent](https://github.com/earendil-works/pi-coding-agent)**: The interactive terminal-based AI coding assistant.
+* **[llama.cpp](https://github.com/ggerganov/llama.cpp)**: The highly optimized C/C++ LLM inference engine powering the local backend server.
 
 ---
 
