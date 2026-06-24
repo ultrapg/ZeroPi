@@ -254,6 +254,7 @@ pub fn generate_default_model_config(model_dir: &Path, model_name: &str) -> Resu
         ctx_size: 6000,
         n_gpu_layers: 99,
         temperature: 0.0,
+        thinking: model_name.to_lowercase().contains("thinking"),
     };
 
     let config_path = model_dir.join("config.json");

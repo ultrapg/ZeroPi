@@ -142,7 +142,7 @@ pub fn clean_absolute_path(path: &Path) -> Result<PathBuf> {
     }
 }
 
-pub fn write_pi_config(workspace_dir: &Path, host: &str, port: u16, ctx_size: usize) -> Result<()> {
+pub fn write_pi_config(workspace_dir: &Path, host: &str, port: u16, ctx_size: usize, thinking: bool) -> Result<()> {
     let pi_agent_dir = workspace_dir.join("home").join(".pi").join("agent");
     std::fs::create_dir_all(&pi_agent_dir)?;
 
@@ -158,7 +158,7 @@ pub fn write_pi_config(workspace_dir: &Path, host: &str, port: u16, ctx_size: us
                     {
                         "id": "local-model",
                         "name": "Local Llama Model",
-                        "reasoning": false,
+                        "reasoning": thinking,
                         "input": ["text"],
                         "contextWindow": ctx_size,
                         "maxTokens": ctx_size / 2

@@ -59,6 +59,7 @@ async fn main() -> Result<()> {
         &config.llama_host,
         config.llama_port,
         model_config.ctx_size,
+        model_config.thinking,
     )?;
 
     // Create a Job Object to ensure child processes are terminated when the parent exits or is closed

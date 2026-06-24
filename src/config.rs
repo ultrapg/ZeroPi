@@ -50,6 +50,8 @@ pub struct ModelConfig {
     pub ctx_size: usize,
     pub n_gpu_layers: usize,
     pub temperature: f32,
+    #[serde(default)]
+    pub thinking: bool,
 }
 
 impl ModelConfig {
