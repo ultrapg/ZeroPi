@@ -231,30 +231,27 @@ pub fn generate_default_model_config(model_dir: &Path, model_name: &str) -> Resu
         }
     }
 
-    let filename = if let Some(fname) = gguf_filename {
-        fname
-    } else {
-        match model_name {
-            "qwen3-1.7b" => "Qwen3-1.7B-Q4_K_M.gguf".to_string(),
-            "qwen2.5-coder-0.5b-instruct" => "qwen2.5-coder-0.5b-instruct-q4_k_m.gguf".to_string(),
-            _ => format!("{}.gguf", model_name),
+    let defaults_data = include_str!("config.json");
+    let defaults: Vec<crate::config::ModelConfig> = serde_json::from_str(defaults_data)
+        .map_err(|e| anyhow::anyhow!("Failed to parse src/config.json: {}", e))?;
+
+    let default_model_config = defaults.into_iter().find(|m| m.name == model_name);
+
+    let config = if let Some(mut m) = default_model_config {
+        if let Some(fname) = gguf_filename {
+            m.filename = fname;
         }
-    };
-
-    let download_url = match model_name {
-        "qwen3-1.7b" => "https://huggingface.co/unsloth/Qwen3-1.7B-GGUF/resolve/main/Qwen3-1.7B-Q4_K_M.gguf".to_string(),
-        "qwen2.5-coder-0.5b-instruct" => "https://huggingface.co/Qwen/Qwen2.5-Coder-0.5B-Instruct-GGUF/resolve/main/qwen2.5-coder-0.5b-instruct-q4_k_m.gguf".to_string(),
-        _ => "".to_string(),
-    };
-
-    let config = crate::config::ModelConfig {
-        name: model_name.to_string(),
-        filename,
-        download_url,
-        ctx_size: 6000,
-        n_gpu_layers: 99,
-        temperature: 0.0,
-        thinking: model_name.to_lowercase().contains("thinking"),
+        m
+    } else {
+        crate::config::ModelConfig {
+            name: model_name.to_string(),
+            filename: gguf_filename.unwrap_or_else(|| format!("{}.gguf", model_name)),
+            download_url: "".to_string(),
+            ctx_size: 6000,
+            n_gpu_layers: 99,
+            temperature: 0.0,
+            thinking: model_name.to_lowercase().contains("thinking"),
+        }
     };
 
     let config_path = model_dir.join("config.json");

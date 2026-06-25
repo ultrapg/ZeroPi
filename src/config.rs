@@ -14,7 +14,7 @@ pub struct ZeroPiConfig {
 impl Default for ZeroPiConfig {
     fn default() -> Self {
         Self {
-            default_model: "qwen3-1.7b".to_string(),
+            default_model: "nvidia-nemotron-3-nano-4b".to_string(),
             llama_port: 8080,
             llama_host: "127.0.0.1".to_string(),
             backend: "vulkan".to_string(),

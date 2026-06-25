@@ -176,6 +176,10 @@ pub fn write_pi_config(workspace_dir: &Path, host: &str, port: u16, ctx_size: us
         "enabledModels": ["local-llama/*"],
         "skills": {
             "enabled": true
+        },
+        "compaction": {
+            "enabled": true,
+            "keepRecentTokens": ctx_size / 2
         }
     });
     std::fs::write(&settings_json_path, serde_json::to_string_pretty(&settings_content)?)?;
