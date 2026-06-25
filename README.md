@@ -62,7 +62,7 @@ The global configuration file `zeropi_config.json` allows configuring the backen
 
 ```json
 {
-  "default_model": "qwen-2.5-coder-0.5b",
+  "default_model": "nvidia-nemotron-3-nano-4b",
   "llama_port": 8080,
   "llama_host": "127.0.0.1",
   "backend": "vulkan",
@@ -85,9 +85,9 @@ If a model folder is scanned and does not contain a configuration, ZeroPi automa
 
 ```json
 {
-  "name": "qwen-2.5-coder-0.5b",
-  "filename": "qwen2.5-coder-0.5b-instruct-q4_k_m.gguf",
-  "download_url": "",
+  "name": "nvidia-nemotron-3-nano-4b",
+  "filename": "NVIDIA-Nemotron3-Nano-4B-Q4_K_M.gguf",
+  "download_url": "https://huggingface.co/nvidia/NVIDIA-Nemotron-3-Nano-4B-GGUF/resolve/main/NVIDIA-Nemotron3-Nano-4B-Q4_K_M.gguf",
   "ctx_size": 6000,
   "n_gpu_layers": 99,
   "temperature": 0.0,
@@ -96,6 +96,15 @@ If a model folder is scanned and does not contain a configuration, ZeroPi automa
 ```
 
 * `thinking`: A boolean (defaults to `false`). Set to `true` for models that support native reasoning/thinking output patterns (e.g. Qwen-3-Thinking or deepseek-r1 reasoning outputs). When set to `true`, ZeroPi configures the Pi agent's model profile with `"reasoning": true` so it properly parses and utilizes the model's thinking sequences.
+
+---
+
+## Automatic Context Compaction Resolution
+
+To prevent context window overflows, the Pi coding agent automatically compacts and summarizes older history when the active session reaches the model's context threshold. 
+* By default, the Pi agent keeps the most recent **20,000 tokens** unsummarized.
+* Since ZeroPi configures a smaller, resource-efficient context size of **6,000 tokens**, standard runs trigger compaction loops throwing: `Compaction failed: Nothing to compact (session too small)`.
+* ZeroPi fixes this by dynamically injecting `"compaction": { "enabled": true, "keepRecentTokens": ctx_size / 2 }` (e.g., keeping `3000` tokens) into the Pi agent's `settings.json`. This enables clean, error-free context summarization optimized for local resource-constrained models.
 
 ---
 
