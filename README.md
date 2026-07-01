@@ -33,7 +33,7 @@ ZeroPi is a portable, self-contained Rust executable designed for Windows to dow
 When running ZeroPi, it establishes and maintains the following clean structure within its directory:
 
 ```text
-E:\zeropi\
+zeropi\
 ├── README.md               # Detailed project documentation
 ├── Cargo.toml              # Rust project description
 ├── zeropi_config.json      # Suite configuration
